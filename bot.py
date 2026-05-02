@@ -8,7 +8,7 @@ from aiogram.types import Message
 # НАСТРОЙКИ — ЗАПОЛНИТЕ ЭТО!
 # ==============================
 BOT_TOKEN = "8767854896:AAHbnxyRkXWWB1FNZw2Vyc_XrNwJ4ljic4k"   # Токен от @BotFather
-ADMIN_ID = 7691899663             # Ваш Chat ID (узнать у @userinfobot)
+ADMIN_ID = 7691899663            # Ваш Chat ID (узнать у @userinfobot)
 # ==============================
 
 logging.basicConfig(level=logging.INFO)
@@ -23,7 +23,9 @@ user_map = {}
 async def start(msg: Message):
     await msg.answer(
         "👋 Привет! Напишите ваше сообщение, и мы ответим вам как можно скорее.\n"
-        "Вы можете отправить текст, фото или файл."
+        "Вы можете отправить текст, фото или файл.\n\n"
+        "👋 Hello! Send your message and we will reply as soon as possible.\n"
+        "You can send text, photo or file."
     )
 
 
@@ -50,7 +52,6 @@ async def handle_message(msg: Message):
 
         if target_chat:
             try:
-                # Пересылаем ответ пользователю в зависимости от типа
                 if msg.text:
                     await bot.send_message(target_chat, f"💬 *Ответ:*\n{msg.text}", parse_mode="Markdown")
                 elif msg.photo:
@@ -62,7 +63,7 @@ async def handle_message(msg: Message):
                 elif msg.sticker:
                     await bot.send_sticker(target_chat, msg.sticker.file_id)
 
-                await msg.react([types.ReactionTypeEmoji(emoji="✅")])
+                await msg.answer("✅ Ответ отправлен!")
             except Exception as e:
                 await msg.answer(f"❌ Не удалось отправить: {e}")
         else:
@@ -94,7 +95,6 @@ async def handle_message(msg: Message):
                 await msg.answer("⚠️ Этот тип сообщений не поддерживается.")
                 return
 
-            # Сохраняем связь message_id → user chat_id
             user_map[sent.message_id] = msg.chat.id
             await msg.answer("✅ Сообщение отправлено! Ожидайте ответа.")
 
